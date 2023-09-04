@@ -7,6 +7,7 @@ FREQ_MEDIUM = 50000
 FREQ_SLOW = 100000
 FREQ_VERY_SLOW = 1000000
 
+
 callbacks = {
     FREQ_VERY_FAST: [],
     FREQ_FAST: [],
