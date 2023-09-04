@@ -1,5 +1,6 @@
 import ujson
 
+
 class ConfigVar:
     value = None
     type_var = None
