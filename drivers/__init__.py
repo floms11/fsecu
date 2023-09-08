@@ -1,6 +1,7 @@
 """
 Тут буде драйвери для конкретних пристоїв, які використовуються у різних контролерах
 """
+from machine import Pin, I2C
 import utime
 
 from .low_level import (
@@ -15,9 +16,8 @@ from .low_level import (
     DriverAccel,
     DriverGyro,
 )
-from machine import Pin, I2C
-from ..loop import FREQ_NORMAL
-from .mpu6050 import MPU6050 as _MPU6050
+from ..controller import FREQ_NORMAL
+from ..libs.mpu6050 import MPU6050 as _MPU6050
 
 
 class ServoSG90(DriverPWMServo):
@@ -55,11 +55,10 @@ class ESCBrushed1625(DriverESCMotor):
     duty_start = 4000
     duty_end = 6000
 
-    def calibration(self):
+    def _calibration(self):
         self.motor_value(1)
-        utime.sleep(0.1)
+        utime.sleep(0.05)
         self.motor_value(0)
-        utime.sleep(1)
 
 
 class Encoder(DriverEncoder):
@@ -68,7 +67,7 @@ class Encoder(DriverEncoder):
     Працює через кінцеві автомати.
     Без проблем визначає високу частоту імпульсів.
     """
-    period = FREQ_NORMAL
+    freq_update = FREQ_NORMAL
 
 
 class DirectionEncoder(DriverDirectionEncoder):
@@ -77,7 +76,7 @@ class DirectionEncoder(DriverDirectionEncoder):
     Підтримується енкодерами з двома контактами.
     Важливо! Контакти до яких підключено енкодер мають стояти поруч
     """
-    period = FREQ_NORMAL
+    freq_update = FREQ_NORMAL
 
 
 class MPU6050(_MPU6050, DriverAccel, DriverGyro):
@@ -130,6 +129,6 @@ class LiionBattery3s(DriverBattery):
     Нажаль такому способу заміру заряду можна довіряти тільки приблизно.
     """
     min_voltage: float = 9
-    max_voltage: float = 12.4
+    max_voltage: float = 12.3
     smoothing1: float = 0.0005
     smoothing2: float = 0.04
