@@ -1,9 +1,9 @@
 import math
 import utime
 from ..base import BasePart
-from ...global_vars import Var, SHORT, BYTE, SYNC_CONFIG, COMMUNICATION_ALLWAYS_SEND
-from ...drivers import DriverEncoder, DriverBattery
-from ...controller import Controller, FREQ_MEDIUM
+from global_vars import Var, SHORT, BYTE, SYNC_CONFIG, COMMUNICATION_ALLWAYS_SEND
+from drivers import DriverEncoder, DriverBattery
+from controller import Controller, FREQ_MEDIUM
 
 
 class Dashboard(BasePart):

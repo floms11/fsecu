@@ -2,8 +2,8 @@ import struct
 
 import utime
 import ujson
-from ..logging import getLogger
-from ..controller import Startup
+from logging import getLogger
+from controller import Startup
 
 logger = getLogger('global_vars')
 

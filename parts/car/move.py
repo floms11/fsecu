@@ -1,8 +1,8 @@
 import utime
 from ..base import BasePart
-from ...global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
-from ...drivers import DriverMotor
-from ...controller import Controller, FREQ_NORMAL
+from global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
+from drivers import DriverMotor
+from controller import Controller, FREQ_NORMAL
 
 
 class Move(BasePart):

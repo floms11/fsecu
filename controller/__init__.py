@@ -1,10 +1,9 @@
 import _thread
-import time
 
 import utime
 
-from ..parts.base import BasePart
-from ..logging import getLogger
+from parts.base import BasePart
+from logging import getLogger
 
 
 FREQ_VERY_FAST = 100
@@ -118,16 +117,16 @@ class Controller:
 
         intervals_call = tuple(set(i.freq for i in updates))
         functions_call = {i.freq: tuple(j.callback for j in updates if j.freq == i.freq) for i in updates}
-        last_call = {i: time.ticks_cpu() for i in intervals_call}
+        last_call = {i: utime.ticks_cpu() for i in intervals_call}
 
         logger.info(f"Loop started")
         if not thread:
             self._started_thread0 = True
         while self._is_update:
             try:
-                t = time.ticks_cpu()
+                t = utime.ticks_cpu()
                 for interval in intervals_call:
-                    if time.ticks_diff(t, last_call[interval]) >= interval:
+                    if utime.ticks_diff(t, last_call[interval]) >= interval:
                         for c in functions_call[interval]:
                             run(c)
                         last_call[interval] = t

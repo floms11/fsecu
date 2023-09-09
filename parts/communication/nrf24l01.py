@@ -1,13 +1,11 @@
 import struct
 
-import utime
-
-from ...controller import FREQ_FAST, Controller
-from ...libs.nrf24l01 import *
+from controller import FREQ_FAST, Controller
+from libs.nrf24l01 import *
 from machine import SPI, Pin
 from ..base import BasePart
-from ...global_vars import Var, SYNC_CONFIG, COMMUNICATION_ALLWAYS_SEND, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
-from ...logging import getLogger
+from global_vars import Var, SYNC_CONFIG, COMMUNICATION_ALLWAYS_SEND, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
+from logging import getLogger
 
 logger = getLogger('nrf21l01')
 

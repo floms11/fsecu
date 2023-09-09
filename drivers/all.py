@@ -16,8 +16,8 @@ from .low_level import (
     DriverAccel,
     DriverGyro,
 )
-from ..controller import FREQ_NORMAL
-from ..libs.mpu6050 import MPU6050 as _MPU6050
+from controller import FREQ_NORMAL
+from libs.mpu6050 import MPU6050 as _MPU6050
 
 
 class ServoSG90(DriverPWMServo):

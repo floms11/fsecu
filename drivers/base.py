@@ -1,10 +1,8 @@
-from ..controller import Startup, Shutdown, Update
-
-
 class BaseDriver:
     freq_update: int = 0
 
     def __init__(self):
+        from controller import Startup, Shutdown, Update
         Startup(self._startup)
         Shutdown(self._shutdown)
         if self.freq_update > 0:

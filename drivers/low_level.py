@@ -3,7 +3,7 @@
 """
 
 import rp2
-from ..controller import FREQ_SLOW, FREQ_NORMAL
+from controller import FREQ_SLOW, FREQ_NORMAL
 from .base import BaseDriver
 from machine import Pin, PWM, ADC
 

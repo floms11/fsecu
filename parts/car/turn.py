@@ -1,7 +1,7 @@
 from ..base import BasePart
-from ...global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
-from ...drivers import DriverGyro, DriverPWMServo, DriverDirectionEncoder
-from ...controller import Controller, FREQ_NORMAL
+from global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
+from drivers import DriverGyro, DriverPWMServo, DriverDirectionEncoder
+from controller import Controller, FREQ_NORMAL
 from .dashboard import Dashboard
 
 
