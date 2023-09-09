@@ -13,11 +13,11 @@ class Turn(BasePart):
     freq_update = FREQ_NORMAL
     _turn = Var(b'\xa0', BYTE, 0, -100, 100, params=(COMMUNICATION_RECV, ))
 
-    _left_servo_position = Var(b'\xa1', float, 0, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
-    _null_servo_position = Var(b'\xa2', float, 0.5, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
-    _right_servo_position = Var(b'\xa3', float, 1, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
-    _stability_control = Var(b'\xa4', bool, True, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
-    _quadratic_control = Var(b'\xa5', bool, True, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _left_servo_position = Var(b'\xd0', float, 0, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _null_servo_position = Var(b'\xd1', float, 0.5, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _right_servo_position = Var(b'\xd2', float, 1, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _quadratic_control = Var(b'\xd3', bool, False, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _stability_control = Var(b'\xd4', bool, False, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
 
     _servo: DriverPWMServo
     _gyro: DriverGyro

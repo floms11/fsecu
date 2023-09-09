@@ -15,14 +15,14 @@ class Dashboard(BasePart):
     _period_write_mileage: int = 1000  # ms
     _filename_mileage: str = '.mileage'
 
-    _wheel_radius = Var(b'\xc0', float, 0, params=(SYNC_CONFIG, ))
-    _gear_ratio = Var(b'\xc1', float, 0, params=(SYNC_CONFIG, ))
-    _motor_max_rpm = Var(b'\xc2', float, 0, params=(SYNC_CONFIG, ))
+    _wheel_radius = Var(b'\xf0', float, 0, params=(SYNC_CONFIG, ))
+    _gear_ratio = Var(b'\xf1', float, 0, params=(SYNC_CONFIG, ))
+    _motor_max_rpm = Var(b'\xf2', float, 0, params=(SYNC_CONFIG, ))
 
-    _mileage_var = Var(b'\xd0', float, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
-    _speed_var = Var(b'\xd1', SHORT, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
-    _battery_percent_var = Var(b'\xd2', BYTE, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
-    _battery_voltage_var = Var(b'\xd3', BYTE, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
+    _mileage_var = Var(b'\xb0', float, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
+    _speed_var = Var(b'\xb1', SHORT, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
+    _battery_percent_var = Var(b'\xb2', BYTE, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
+    _battery_voltage_var = Var(b'\xb3', BYTE, 0, params=(COMMUNICATION_ALLWAYS_SEND, ))
 
     _mileage: float = 0
     _mileage_rotation_count: float = 0

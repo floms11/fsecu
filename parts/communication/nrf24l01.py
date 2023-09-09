@@ -17,10 +17,10 @@ class NRF24L01Communication(BasePart):
     thread = True
     nrf: RF24
 
-    _channel = Var(b'\xe0', int, 1, 0, 125, params=(SYNC_CONFIG, ))
-    _pipe = Var(b'\xe1', int, 1000, params=(SYNC_CONFIG, ))
-    _pa_level = Var(b'\xe2', int, 0, params=(SYNC_CONFIG, ))
-    _data_rate = Var(b'\xe3', int, 0, params=(SYNC_CONFIG, ))
+    _channel = Var(b'\xcf', int, 1, 0, 125, params=(SYNC_CONFIG, ))
+    _pipe = Var(b'\xce', int, 1000, params=(SYNC_CONFIG, ))
+    _pa_level = Var(b'\xcd', int, 0, params=(SYNC_CONFIG, ))
+    _data_rate = Var(b'\xcc', int, 0, params=(SYNC_CONFIG, ))
 
     def __init__(self, spi_id: int, sck: Pin, mosi: Pin, miso: Pin, csn: Pin, ce: Pin):
         super().__init__()
@@ -72,7 +72,7 @@ class NRF24L01Communication(BasePart):
         fmt = '<'
         while s < self.nrf.payload_length:
             addr = package[s].to_bytes(1, 'big')
-            if addr == b'\xfe':
+            if addr == b'\xcf':
                 fmt += f"bb"
                 s += 1
             elif addr != b'\x00':
@@ -85,7 +85,7 @@ class NRF24L01Communication(BasePart):
         for i in range(0, len(values), 2):
             addr = values[i].to_bytes(1, 'big')
             value = values[i+1]
-            if addr == b'\xfe':
+            if addr == b'\xcf':
                 if Var.addr_is_var(value.to_bytes(1, 'big')) and COMMUNICATION_REQUEST_SEND in Var.addr_get_params(value.to_bytes(1, 'big')):
                     self.vars_request.append(value.to_bytes(1, 'big'))
             elif Var.addr_is_var(addr) and COMMUNICATION_RECV in Var.addr_get_params(addr):

@@ -32,7 +32,7 @@ LENGTH_VARS = {
     FLOAT: 4,
 }
 
-FILENAME_CONFIG = 'global_vars.json'
+FILENAME_CONFIG = 'config.json'
 
 AVAILABLE_PARAMS = (
     SYNC_CONFIG,
