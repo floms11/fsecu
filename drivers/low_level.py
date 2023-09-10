@@ -1,11 +1,13 @@
 """
 Тут буде базова логіка для адаптерів різних пристроїв
 """
-
+import machine
 import rp2
-from controller import FREQ_SLOW, FREQ_NORMAL
+import utime
+
+from controller import FREQ_SLOW, FREQ_NORMAL, FREQ_FAST
 from .base import BaseDriver
-from machine import Pin, PWM, ADC
+from machine import Pin, PWM, ADC, Timer
 
 
 class DriverPWMServo(BaseDriver):
@@ -221,7 +223,7 @@ class DriverESCMotor(DriverMotor):
 
 
 class DriverEncoder(DriverMotor):
-    freq_update = FREQ_NORMAL
+    freq_update = FREQ_FAST
 
     _pin0: Pin
     _count_pulses_rotation: int
@@ -229,13 +231,13 @@ class DriverEncoder(DriverMotor):
     _rpm: int = 0
     _rotation_count: float = 0
     _old_count: int = 0
-    _update_second_count: int = 0
+    _old_count_time = utime.ticks_cpu()
 
     def __init__(self, pin0: Pin, count_pulses_rotation: int):
         super().__init__()
         self._pin0 = pin0
         self._count_pulses_rotation = count_pulses_rotation
-        self._update_second_count = int(1000000 / self.freq_update)
+        Timer(mode=Timer.PERIODIC, period=1, callaback=self._calc_rpm)
 
     def get_rpm(self):
         return self._rpm
@@ -248,20 +250,31 @@ class DriverEncoder(DriverMotor):
         self._sm_count.active(1)
 
     def _update(self, controller):
-        count = self._get_sm_last_value(self._sm_count, 0)
-        self._calc_rpm(count)
+        pass
+        # self._calc_rpm()
 
-    def _calc_rpm(self, count_sm):
+    def _calc_rpm(self):
+        time_current = utime.ticks_cpu()
+        count_sm = self._get_sm_last_value(self._sm_count, 0)
+        if count_sm < self._old_count:
+            count_diff = self._old_count - count_sm
+            time_diff = utime.ticks_diff(time_current, self._old_count_time)
+            rotation_count = count_diff / self._count_pulses_rotation
+            rpm = int(rotation_count * (1000000 / time_diff) * 60)
+
+            self._rpm = rpm
+            self._old_count = count_sm
+            self._old_count_time = time_current
+            print(count_diff, time_diff, self._rpm)
         if count_sm > self._old_count:
             self._old_count = count_sm
-            return 0
-        if count_sm <= 1:
-            count_sm = self._old_count
+
+        update_second_count = int(1000000 / self.freq_update)
         rotation_count = (self._old_count - count_sm) / self._count_pulses_rotation
-        rpm = int(rotation_count * self._update_second_count * 60)
-        self._old_count = count_sm
+        rpm = int(rotation_count * update_second_count * 60)
+        #self._old_count = count_sm
         self._rotation_count += rotation_count
-        self._rpm = rpm
+        #self._rpm = rpm
 
     @staticmethod
     def _get_sm_last_value(sm, default=0):

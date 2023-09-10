@@ -8,6 +8,7 @@ from controller import Controller, FREQ_MEDIUM
 
 class Dashboard(BasePart):
     freq_update = FREQ_MEDIUM
+    thread = True
 
     _motor_encoder: DriverEncoder
     _battery: DriverBattery

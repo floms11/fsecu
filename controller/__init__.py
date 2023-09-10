@@ -6,7 +6,6 @@ from parts.base import BasePart
 from logging import getLogger
 
 
-FREQ_VERY_FAST = 100
 FREQ_FAST = 1000
 FREQ_NORMAL = 10000
 FREQ_MEDIUM = 50000
@@ -115,21 +114,17 @@ class Controller:
                 logger.error(f"Loop closed")
                 return
 
-        intervals_call = tuple(set(i.freq for i in updates))
-        functions_call = {i.freq: tuple(j.callback for j in updates if j.freq == i.freq) for i in updates}
-        last_call = {i: utime.ticks_cpu() for i in intervals_call}
+        functions_call = tuple([i.callback, i.freq, utime.ticks_cpu()] for i in updates)
 
         logger.info(f"Loop started")
         if not thread:
             self._started_thread0 = True
         while self._is_update:
             try:
-                t = utime.ticks_cpu()
-                for interval in intervals_call:
-                    if utime.ticks_diff(t, last_call[interval]) >= interval:
-                        for c in functions_call[interval]:
-                            run(c)
-                        last_call[interval] = t
+                for c in functions_call:
+                    if c[1] <= FREQ_FAST or utime.ticks_diff(utime.ticks_cpu(), c[2]) >= c[1]:
+                        run(c[0])
+                        c[2] = utime.ticks_cpu()
             except (KeyboardInterrupt, SystemExit):
                 break
         logger.info(f"Close Loop...")
