@@ -67,7 +67,7 @@ class Encoder(DriverEncoder):
     Працює через кінцеві автомати.
     Без проблем визначає високу частоту імпульсів.
     """
-    freq_update = FREQ_NORMAL
+    pass
 
 
 class DirectionEncoder(DriverDirectionEncoder):
@@ -76,7 +76,7 @@ class DirectionEncoder(DriverDirectionEncoder):
     Підтримується енкодерами з двома контактами.
     Важливо! Контакти до яких підключено енкодер мають стояти поруч
     """
-    freq_update = FREQ_NORMAL
+    pass
 
 
 class MPU6050(_MPU6050, DriverAccel, DriverGyro):

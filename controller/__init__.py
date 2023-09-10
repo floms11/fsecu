@@ -93,14 +93,6 @@ class Controller:
 
     def _start_loop(self, startups, updates, shutdowns, thread=False):
         logger = getLogger('thread1' if thread else 'thread0')
-
-        def run(c):
-            try:
-                c(self)
-                return True
-            except Exception as e:
-                logger.error(f'Error loop callback: {str(e)}')
-                return False
         if thread:
             while not self._started_thread0:
                 utime.sleep(0.01)
@@ -108,23 +100,30 @@ class Controller:
             return
         logger.info(f"Start loop...")
         logger.info(f"Run startups...")
+
         for startup in startups:
-            if not run(startup.function):
+            try:
+                startup.function(self)
+            except Exception as e:
+                logger.error(f'Error run startup: {str(e)}')
                 self._is_update = False
                 logger.error(f"Loop closed")
                 return
 
-        functions_call = tuple([i.callback, i.freq, utime.ticks_cpu()] for i in updates)
+        functions = tuple([i.callback, i.freq, utime.ticks_cpu()] for i in updates)
 
         logger.info(f"Loop started")
         if not thread:
             self._started_thread0 = True
         while self._is_update:
             try:
-                for c in functions_call:
-                    if c[1] <= FREQ_FAST or utime.ticks_diff(utime.ticks_cpu(), c[2]) >= c[1]:
-                        run(c[0])
-                        c[2] = utime.ticks_cpu()
+                for f in functions:
+                    if utime.ticks_diff(utime.ticks_cpu(), f[2]) >= f[1]:
+                        try:
+                            f[0](self)
+                        except Exception as e:
+                            logger.error(f'Error run update: {str(e)}')
+                        f[2] = utime.ticks_cpu()
             except (KeyboardInterrupt, SystemExit):
                 break
         logger.info(f"Close Loop...")
@@ -132,5 +131,8 @@ class Controller:
         self._is_update = False
         logger.info(f"Run shutdowns...")
         for shutdown in shutdowns:
-            run(shutdown.function)
+            try:
+                shutdown.function(self)
+            except Exception as e:
+                logger.error(f'Error run shutdown: {str(e)}')
         logger.info(f"Loop closed")
