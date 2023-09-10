@@ -6,11 +6,11 @@ from parts.base import BasePart
 from logging import getLogger
 
 
-FREQ_FAST = 1000
-FREQ_NORMAL = 10000
-FREQ_MEDIUM = 50000
-FREQ_SLOW = 100000
-FREQ_VERY_SLOW = 1000000
+DELAY_FAST = 1000
+DELAY_NORMAL = 10000
+DELAY_MEDIUM = 50000
+DELAY_SLOW = 100000
+DELAY_VERY_SLOW = 1000000
 
 
 _updates = []
@@ -26,7 +26,7 @@ class Update:
     callback = None
     freq = None
 
-    def __init__(self, callback, freq=FREQ_NORMAL, thread=False):
+    def __init__(self, callback, freq=DELAY_NORMAL, thread=False):
         self.callback = callback
         self.freq = freq
         if thread:

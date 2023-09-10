@@ -5,7 +5,7 @@ import machine
 import rp2
 import utime
 
-from controller import FREQ_SLOW, FREQ_NORMAL, FREQ_FAST
+from controller import DELAY_SLOW, DELAY_NORMAL
 from .base import BaseDriver
 from machine import Pin, PWM, ADC
 
@@ -223,7 +223,7 @@ class DriverESCMotor(DriverMotor):
 
 
 class DriverEncoder(DriverMotor):
-    freq_update = 1000000
+    delay_update = DELAY_NORMAL
 
     _pin0: Pin
     _count_pulses_rotation: int
@@ -232,7 +232,6 @@ class DriverEncoder(DriverMotor):
     _rotation_count: float = 0
     _old_count: int = 0
     _old_count_time = utime.ticks_cpu()
-    _time_diff = 1
 
     def __init__(self, pin0: Pin, count_pulses_rotation: int):
         super().__init__()
@@ -250,18 +249,8 @@ class DriverEncoder(DriverMotor):
         self._sm_count.active(1)
 
     def _update(self, controller):
-        count_sm = 0
-        print(self._sm_count.rx_fifo(), count_sm)
-        for _ in range(self._sm_count.rx_fifo()):
-            count_sm = self._sm_count.get()
-        print(self._sm_count.rx_fifo(), count_sm)
-        for _ in range(self._sm_count.rx_fifo()):
-            count_sm = self._sm_count.get()
-        print(self._sm_count.rx_fifo(), count_sm)
-        for _ in range(self._sm_count.rx_fifo()):
-            count_sm = self._sm_count.get()
-        print(self._sm_count.rx_fifo(), count_sm)
-        # self._calc_rpm(count_sm)
+        count_sm = self._get_sm_last_value(self._sm_count, 0)
+        self._calc_rpm(count_sm)
 
     def _calc_rpm(self, count_sm):
         if count_sm > self._old_count:
@@ -270,16 +259,19 @@ class DriverEncoder(DriverMotor):
         if count_sm <= 1:
             count_sm = self._old_count
 
+        time_diff = utime.ticks_diff(utime.ticks_cpu(), self._old_count_time)
         rotation_count = (self._old_count - count_sm) / self._count_pulses_rotation
+
         self._rotation_count += rotation_count
-        self._time_diff = utime.ticks_diff(utime.ticks_cpu(), self._old_count_time)
-        self._rpm = int(rotation_count * (1000000 / self._time_diff) * 60)
-        print(self._old_count - count_sm, self._time_diff, self._rpm)
+        self._rpm = int(rotation_count * (1000000 / time_diff) * 60)
         self._old_count = count_sm
         self._old_count_time = utime.ticks_cpu()
 
     @staticmethod
     def _get_sm_last_value(sm, default=0):
+        for _ in range(sm.rx_fifo()):
+            default = sm.get()
+        # Милиця, щоб отримувати актуальні значення
         for _ in range(sm.rx_fifo()):
             default = sm.get()
         return default
@@ -385,7 +377,7 @@ class DriverDirectionEncoder(DriverEncoder):
 
 
 class DriverBattery(BaseDriver):
-    freq_update = FREQ_SLOW
+    delay_update = DELAY_SLOW
 
     min_voltage: float
     max_voltage: float

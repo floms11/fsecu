@@ -1,7 +1,7 @@
 from ..base import BasePart
 from global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
 from drivers import DriverGyro, DriverPWMServo, DriverDirectionEncoder
-from controller import Controller, FREQ_FAST
+from controller import Controller, DELAY_FAST
 from .dashboard import Dashboard
 
 
@@ -10,7 +10,7 @@ class Turn(BasePart):
     Модуль для керування поворотами.
     Використовується для класичного транспорту з єдиною поворотною вісю
     """
-    freq_update = FREQ_FAST
+    delay_update = DELAY_FAST
     _turn = Var(b'\xa0', BYTE, 0, -100, 100, params=(COMMUNICATION_RECV, ))
 
     _left_servo_position = Var(b'\xd0', float, 0, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))

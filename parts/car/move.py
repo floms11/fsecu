@@ -2,7 +2,7 @@ import utime
 from ..base import BasePart
 from global_vars import Var, BYTE, SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV
 from drivers import DriverMotor
-from controller import Controller, FREQ_FAST
+from controller import Controller, DELAY_FAST
 
 
 class Move(BasePart):
@@ -10,7 +10,7 @@ class Move(BasePart):
     Модуль для керування рухом.
     Використовується для транспорту з єдиним мотором
     """
-    freq_update = FREQ_FAST
+    delay_update = DELAY_FAST
 
     _motor: DriverMotor
 

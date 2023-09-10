@@ -1,6 +1,6 @@
 import struct
 
-from controller import FREQ_FAST, Controller
+from controller import DELAY_FAST, Controller
 from libs.nrf24l01 import *
 from machine import SPI, Pin
 from ..base import BasePart
@@ -11,7 +11,7 @@ logger = getLogger('nrf21l01')
 
 
 class NRF24L01Communication(BasePart):
-    freq_update = FREQ_FAST
+    delay_update = DELAY_FAST
     thread = True
     nrf: RF24
 

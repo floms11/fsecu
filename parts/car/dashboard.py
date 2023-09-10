@@ -3,11 +3,11 @@ import utime
 from ..base import BasePart
 from global_vars import Var, SHORT, BYTE, SYNC_CONFIG, COMMUNICATION_ALLWAYS_SEND
 from drivers import DriverEncoder, DriverBattery
-from controller import Controller, FREQ_MEDIUM
+from controller import Controller, DELAY_MEDIUM
 
 
 class Dashboard(BasePart):
-    freq_update = FREQ_MEDIUM
+    delay_update = DELAY_MEDIUM
     thread = True
 
     _motor_encoder: DriverEncoder
