@@ -18,6 +18,9 @@ class Turn(BasePart):
     _right_servo_position = Var(b'\xd2', float, 1, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
     _quadratic_control = Var(b'\xd3', bool, False, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
     _stability_control = Var(b'\xd4', bool, False, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _stability_reaction = Var(b'\xd5', float, 1, 1, 10, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _stability_value0 = Var(b'\xd6', float, 1, 1, 10, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _stability_value1 = Var(b'\xd7', float, 1, 0, 10, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
 
     _servo: DriverPWMServo
     _gyro: DriverGyro
@@ -53,9 +56,10 @@ class Turn(BasePart):
             _vc = degrees_second / 250
             direction = 1 if _vc >= 0 else -1
             _vc = abs(_vc)
-            _v = (_vc ** (1 / 2) / (1 + 2 * speed_coefficient))
-            # _v = (_vc**(1/9) / 6)
-            # _v += _vc ** 1.5
+            v0 = 11 - self._stability_value0.get()
+            v1 = 11 - self._stability_value1.get()
+            _sc = v0 * (1-speed_coefficient) + v1 * speed_coefficient
+            _v = (_vc ** (1 / self._stability_reaction.get()) / _sc)
             if _v > 1:
                 _v = 1
             elif _v < 0:

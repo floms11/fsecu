@@ -16,7 +16,7 @@ class Move(BasePart):
 
     _move = Var(b'\xa1', BYTE, 0, -100, 100, params=(COMMUNICATION_RECV, ))
 
-    _quadratic_control = Var(b'\xd7', float, 1, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
+    _quadratic_control = Var(b'\xd9', float, 1, 0, 1, params=(SYNC_CONFIG, COMMUNICATION_REQUEST_SEND, COMMUNICATION_RECV))
 
     _delay_control = 200
 
