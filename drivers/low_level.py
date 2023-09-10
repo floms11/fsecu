@@ -7,7 +7,7 @@ import utime
 
 from controller import FREQ_SLOW, FREQ_NORMAL, FREQ_FAST
 from .base import BaseDriver
-from machine import Pin, PWM, ADC, Timer
+from machine import Pin, PWM, ADC
 
 
 class DriverPWMServo(BaseDriver):
@@ -237,7 +237,6 @@ class DriverEncoder(DriverMotor):
         super().__init__()
         self._pin0 = pin0
         self._count_pulses_rotation = count_pulses_rotation
-        Timer(mode=Timer.PERIODIC, period=1, callaback=self._calc_rpm)
 
     def get_rpm(self):
         return self._rpm
@@ -250,8 +249,7 @@ class DriverEncoder(DriverMotor):
         self._sm_count.active(1)
 
     def _update(self, controller):
-        pass
-        # self._calc_rpm()
+        self._calc_rpm()
 
     def _calc_rpm(self):
         time_current = utime.ticks_cpu()
