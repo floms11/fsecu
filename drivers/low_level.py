@@ -1,7 +1,6 @@
 """
 Тут буде базова логіка для адаптерів різних пристроїв
 """
-import machine
 import rp2
 import utime
 
@@ -286,13 +285,13 @@ class DriverEncoder(DriverMotor):
         jmp(x_dec, 'd0')
         label('d0')
         mov(isr, x)
-        push(iffull,noblock)
+        push(noblock)
 
         wait(0, pin, 0)
         jmp(x_dec, 'd1')
         label('d1')
         mov(isr, x)
-        push(iffull,noblock)
+        push(noblock)
         
         wrap()
 
